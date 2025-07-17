@@ -103,13 +103,8 @@ function verifyForumSignature(network: string, appName: string, appVersion: stri
     "chain-id": uintCV(chainId),
   });
   const structuredDataHash = bytesToHex(sha256(encodeStructuredDataBytes({ message, domain })));
-
-  //console.log("signature.hash: " + structuredDataHash);
-
   const signatureBytes = hexToBytes(signature);
   const strippedSignature = signatureBytes.slice(0, -1);
-  //console.log("Stripped Signature (Hex):", bytesToHex(strippedSignature));
-
   let pubkey: string = "-";
   let stacksAddress: string = "-";
   try {
@@ -118,14 +113,10 @@ function verifyForumSignature(network: string, appName: string, appVersion: stri
     if (network === "mainnet" || network === "testnet" || network === "devnet") {
       stacksAddress = publicKeyToAddressSingleSig(pubkey, network);
     }
-
-    //console.log("sa: " + pubkey);
   } catch (err: any) {}
-  //console.log("pubkey: " + pubkey);
   let result = false;
   try {
     result = verifySignature(bytesToHex(strippedSignature), structuredDataHash, publicKey);
-    //console.log("verifySignatureRsv: result: " + result);
   } catch (err: any) {}
   return result ? stacksAddress : undefined;
 }

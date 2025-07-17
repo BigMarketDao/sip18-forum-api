@@ -32,11 +32,11 @@ export function setConfigOnStart() {
   const network = process.env.NODE_ENV;
 
   CONFIG.host = process.env[network + "_sui_host"] || "";
-  CONFIG.port = Number(process.env[network + "_sui_port"]) || 6060;
+  CONFIG.port = Number(3025);
   CONFIG.host = process.env[network + "_sui_host"] || "";
 
   CONFIG.mongoDbUrl = process.env[network + "_sui_mongoDbUrl"] || "";
-  CONFIG.mongoDbName = process.env[network + "_sui_mongoDbName"] || "";
+  CONFIG.mongoDbName = "sip18-devnet";
   CONFIG.mongoUser = process.env[network + "_sui_mongoUser"] || "";
   CONFIG.mongoPwd = process.env[network + "_sui_mongoPwd"] || "";
 
