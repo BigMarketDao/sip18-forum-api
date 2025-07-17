@@ -3,7 +3,7 @@
 ############################################################
 
 SERVER=spinoza.brightblock.org;
-DOCKER_NAME=bigmarket_api
+DOCKER_NAME=sip18_forum_api
 
 
 printf "\n\n"
@@ -11,16 +11,16 @@ printf "====================================================\n"
 printf "Building on: $SERVER as docker container: $DOCKER_NAME \n"
 
 source ~/.profile;
-#cd ~/hubgit/bigmarket/bigmarket-api
-#git pull https://github.com/radicleart/bigmarket-api.git daoless
+#cd ~/hubgit/sip18forum/sip18-forum-api
+#git pull https://github.com/radicleart/sip18-forum-api.git daoless
 docker login;
 docker build --build-arg NODE_ENV=testnet -t $DOCKER_NAME .
-docker tag mijoco/bigmarket_api mijoco/bigmarket_api
-docker push mijoco/bigmarket_api:latest
+docker tag mijoco/sip18_forum_api mijoco/sip18_forum_api
+docker push mijoco/sip18_forum_api:latest
 
-#docker pull mijoco/bigmarket_api;
-docker rm -f bigmarket_api  
-docker run -d -t -i --network host -e NODE_ENV=testnet --env-file ~/.env --name $DOCKER_NAME -p 6070:6070 $DOCKER_NAME
+#docker pull mijoco/sip18_forum_api;
+docker rm -f sip18_forum_api  
+docker run -d -t -i --network host -e NODE_ENV=testnet --env-file ~/.env --name $DOCKER_NAME -p 6090:6090 $DOCKER_NAME
 docker logs -f $DOCKER_NAME
 
 printf "Finished....\n"

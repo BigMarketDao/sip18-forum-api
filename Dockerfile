@@ -2,7 +2,7 @@
 FROM node:20-alpine
 
 # Set the default environment variables
-ENV PORT 7020
+ENV PORT 7030
 ARG NODE_ENV=devnet
 ENV NODE_ENV=${NODE_ENV}
 
