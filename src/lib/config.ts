@@ -30,21 +30,17 @@ export function printConfig() {
 
 export function setConfigOnStart() {
   const network = process.env.NODE_ENV;
-
-  CONFIG.host = process.env[network + "_sui_host"] || "";
-  CONFIG.port = Number(3025);
-  CONFIG.host = process.env[network + "_sui_host"] || "";
-
-  CONFIG.mongoDbUrl = process.env[network + "_sui_mongoDbUrl"] || "";
-  CONFIG.mongoDbName = "sip18-devnet";
-  CONFIG.mongoUser = process.env[network + "_sui_mongoUser"] || "";
-  CONFIG.mongoPwd = process.env[network + "_sui_mongoPwd"] || "";
-
-  CONFIG.network = process.env[network + "_sui_network"] || "";
-  CONFIG.stacksApi = process.env[network + "_sui_stacksApi"] || "";
+  CONFIG.host = process.env[network + "_forum_host"] || "";
+  CONFIG.port = Number(process.env[network + "_forum_port"]) || 3025;
+  CONFIG.mongoDbUrl = process.env[network + "_forum_mongoDbUrl"] || "";
+  CONFIG.mongoDbName = process.env[network + "_forum_mongoDbName"] || "sip18-devnet";
+  CONFIG.mongoUser = process.env[network + "_forum_mongoUser"] || "";
+  CONFIG.mongoPwd = process.env[network + "_forum_mongoPwd"] || "";
+  CONFIG.network = process.env[network + "_forum_network"] || "";
+  CONFIG.stacksApi = process.env[network + "_forum_stacksApi"] || "";
   CONFIG.publicAppBaseUrl = network === "devnet" ? "http://localhost:8081" : "http://localhost:3000";
-  CONFIG.publicAppName = process.env[network + "_sui_publicAppName"] || "";
-  CONFIG.publicAppVersion = process.env[network + "_sui_publicAppVersion"] || "";
+  CONFIG.publicAppName = process.env[network + "_forum_publicAppName"] || "";
+  CONFIG.publicAppVersion = process.env[network + "_forum_publicAppVersion"] || "";
 }
 
 export function getConfig() {
