@@ -41,7 +41,7 @@ app.use((req, res, next) => {
   }
 });
 
-app.use("/bigmarket-api/forum", forumRoutes);
+app.use("/forum-api/forum", forumRoutes);
 
 console.log(`\n\nExpress is listening at http://localhost:${getConfig().port}`);
 console.log("Startup Environment: ", process.env.NODE_ENV);
