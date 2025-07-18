@@ -15,7 +15,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@mijoco/stx_helpers": "^0.7.23",
+    "@mijoco/stx_helpers": "^0.7.24",
     "@stacks/common": "^7.0.2",
     "@stacks/connect": "^7.9.0",
     "@stacks/encryption": "^7.0.2",
@@ -38,7 +38,7 @@
     "prettier-plugin-svelte": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "sats-connect": "^3.0.1",
-    "sip18-forum-types": "^1.1.4",
+    "sip18-forum-types": "^1.1.5",
     "ws": "^8.17.1"
   },
   "devDependencies": {
