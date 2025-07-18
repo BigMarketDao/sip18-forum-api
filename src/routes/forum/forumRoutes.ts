@@ -1,6 +1,6 @@
 import express from "express";
 import { AuthenticatedForumContent, ForumMessage, ForumMessageBoard, PostAuthorisation } from "sip18-forum-types";
-import { buildTree, saveMessageBoard, saveMessageOrReply, verifyPost } from "./forum_helper.js";
+import { buildTree, fetchThreadRecursive, saveMessageBoard, saveMessageOrReply, verifyPost } from "./forum_helper.js";
 import { forumMessageBoardCollection, forumMessageCollection } from "../../lib/data/db_models.js";
 
 const router = express.Router();
@@ -74,11 +74,21 @@ router.get("/board/:messageBoardId", async (req, res) => {
   }
 });
 
-router.get("/messages/:boardId", async (req, res) => {
+router.get("/board-messages/:boardId", async (req, res) => {
   try {
     const result = await forumMessageCollection.find({ "forumContent.messageBoardId": req.params.boardId }).sort({ "forumContent.created": -1 }).toArray();
     const messages = result as unknown as Array<AuthenticatedForumContent>;
     const treeData = buildTree(messages);
+    res.json(treeData);
+  } catch (err) {
+    console.error("Error fetching messages:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/messages/:messageId", async (req, res) => {
+  try {
+    const treeData = await fetchThreadRecursive(req.params.messageId, 3);
     res.json(treeData);
   } catch (err) {
     console.error("Error fetching messages:", err);

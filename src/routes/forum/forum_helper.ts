@@ -30,6 +30,32 @@ export function buildTree(messages: AuthenticatedForumContent[]) {
   return roots;
 }
 
+export async function fetchThreadRecursive(messageId: string, depth = 0, maxDepth = 10): Promise<AuthenticatedForumContent | null> {
+  if (depth > maxDepth) return null;
+
+  // 1. Fetch the root message
+  const root = await forumMessageCollection.findOne<AuthenticatedForumContent>({
+    "forumContent.messageId": messageId,
+  });
+  if (!root) return null;
+
+  // 2. Fetch direct children
+  const children = await forumMessageCollection.find({ "forumContent.parentId": messageId }).sort({ "forumContent.created": -1 }).toArray();
+
+  // 3. Recursively attach replies
+  for (const child of children) {
+    const childTree = await fetchThreadRecursive(child.forumContent.messageId, depth + 1, maxDepth);
+    if (childTree) {
+      if (!root.forumContent.replies) root.forumContent.replies = [];
+      root.forumContent.replies.push(childTree);
+    }
+  }
+
+  //root.forumContent.replies?.sort((a, b) => b.forumContent.created - a.forumContent.created);
+
+  return root;
+}
+
 export async function saveMessageOrReply(messageBoard: AuthenticatedForumContent): Promise<boolean> {
   const result = await forumMessageCollection.insertOne(messageBoard);
   return result.insertedId ? true : false;
