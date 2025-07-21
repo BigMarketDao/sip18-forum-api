@@ -80,6 +80,8 @@ export function verifyPost(forumContent: BaseForumContent, auth: PostAuthorisati
       return false;
     }
     const forumPostCV = forumMessageToTupleCV(forumContent);
+    console.log("verifyPost: " + getConfig().network + " : " + getConfig().publicAppName + " : " + getConfig().publicAppVersion);
+    console.log("verifyPost: ", forumPostCV);
 
     let valid = verifyForumSignature(getConfig().network, getConfig().publicAppName, getConfig().publicAppVersion, forumPostCV, auth.publicKey, auth.signature);
 
