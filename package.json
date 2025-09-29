@@ -15,7 +15,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@mijoco/stx_helpers": "^0.7.32",
+    "@mijoco/stx_helpers": "^0.7.40",
     "@stacks/common": "^7.0.2",
     "@stacks/connect": "^7.9.0",
     "@stacks/encryption": "^7.0.2",
