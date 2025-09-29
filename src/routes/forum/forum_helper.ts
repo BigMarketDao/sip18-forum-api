@@ -81,7 +81,6 @@ export function verifyPost(forumContent: BaseForumContent, auth: PostAuthorisati
     }
     const forumPostCV = forumMessageToTupleCV(forumContent);
     console.log("verifyPost: " + getConfig().network + " : " + getConfig().publicAppName + " : " + getConfig().publicAppVersion);
-    //console.log("verifyPost: ", forumPostCV);
 
     let valid = verifyForumSignature(getConfig().network, getConfig().publicAppName, getConfig().publicAppVersion, forumPostCV, auth.publicKey, auth.signature);
 
@@ -111,7 +110,6 @@ function forumMessageToTupleCV(message: BaseForumContent): TupleCV<TupleData<Cla
     created: uintCV(message.created),
     title: stringAsciiCV(message.title),
     content: stringAsciiCV(message.content),
-    name: stringAsciiCV(la.displayName || "unknown"),
   });
 }
 
