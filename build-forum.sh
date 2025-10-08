@@ -2,13 +2,12 @@
 #
 ############################################################
 
-SERVER=spinoza.brightblock.org;
 DOCKER_NAME=sip18_forum_api
 
 
 printf "\n\n"
 printf "====================================================\n"
-printf "Building on: $SERVER as docker container: $DOCKER_NAME \n"
+printf "Building as docker container: $DOCKER_NAME \n"
 
 source ~/.profile;
 #cd ~/hubgit/sip18forum/sip18-forum-api
