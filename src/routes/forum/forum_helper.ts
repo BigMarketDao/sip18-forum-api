@@ -81,6 +81,7 @@ export function verifyPost(forumContent: BaseForumContent, auth: PostAuthorisati
     }
     const forumPostCV = forumMessageToTupleCV(forumContent);
     console.log("verifyPost: " + getConfig().network + " : " + getConfig().publicAppName + " : " + getConfig().publicAppVersion);
+    console.log("verifyPost: forumPostCV: ", forumPostCV);
 
     let valid = verifyForumSignature(getConfig().network, getConfig().publicAppName, getConfig().publicAppVersion, forumPostCV, auth.publicKey, auth.signature);
 
@@ -129,7 +130,9 @@ function verifyForumSignature(network: string, appName: string, appVersion: stri
     version: stringAsciiCV(appVersion),
     "chain-id": uintCV(chainId),
   });
+  console.log("verifyPost: domain: ", domain);
   const structuredDataHash = bytesToHex(sha256(encodeStructuredDataBytes({ message, domain })));
+  console.log("structuredDataHash: " + structuredDataHash);
   const signatureBytes = hexToBytes(signature);
   const strippedSignature = signatureBytes.slice(0, -1);
   let pubkey: string = "-";
