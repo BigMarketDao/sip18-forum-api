@@ -85,7 +85,7 @@ export function verifyPost(forumContent: BaseForumContent, auth: PostAuthorisati
     let valid = verifyForumSignature(getConfig().network, getConfig().publicAppName, getConfig().publicAppVersion, forumPostCV, auth.publicKey, auth.signature);
 
     if (!valid) {
-      console.warn("Signature verification failed");
+      console.warn("Signature verification did not pass");
       return false;
     }
     return true;
@@ -122,6 +122,7 @@ function getC32AddressFromPublicKey(publicKeyHex: string, network: string): stri
 }
 
 function verifyForumSignature(network: string, appName: string, appVersion: string, message: TupleCV<TupleData<ClarityValue>>, publicKey: string, signature: string): string | undefined {
+  console.log("verifyPost: " + network + " : " + appName + " : " + appVersion + " : ", message);
   const chainId = network === "mainnet" ? ChainId.Mainnet : ChainId.Testnet;
   const domain = tupleCV({
     name: stringAsciiCV(appName),
