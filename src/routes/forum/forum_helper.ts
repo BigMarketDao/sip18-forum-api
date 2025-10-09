@@ -2,7 +2,7 @@ import { getConfig } from "../../lib/config.js";
 import { ClarityValue, encodeStructuredDataBytes, publicKeyFromSignatureRsv, publicKeyToAddressSingleSig, stringAsciiCV, TupleCV, tupleCV, TupleData, uintCV, verifySignature } from "@stacks/transactions";
 import { forumMessageBoardCollection, forumMessageCollection } from "../../lib/data/db_models.js";
 import { bytesToHex, hexToBytes } from "@stacks/common";
-import { ChainId } from "@stacks/network";
+import { ChainId, STACKS_MAINNET, STACKS_TESTNET } from "@stacks/network";
 import type { AuthenticatedForumContent, AuthenticatedForumMessageBoard, BaseForumContent, ForumMessage, LinkedAccount, PostAuthorisation } from "sip18-forum-types";
 import { hashSha256Sync } from "@stacks/encryption";
 
@@ -123,35 +123,32 @@ function getC32AddressFromPublicKey(publicKeyHex: string, network: string): stri
 }
 
 function verifyForumSignature(network: string, appName: string, appVersion: string, message: TupleCV<TupleData<ClarityValue>>, publicKey: string, signature: string): string | undefined {
-  console.log("verifyPost: " + network + " : " + appName + " : " + appVersion + " : ", message);
   const chainId = network === "mainnet" ? ChainId.Mainnet : ChainId.Testnet;
   const domain = tupleCV({
     name: stringAsciiCV(appName),
     version: stringAsciiCV(appVersion),
     "chain-id": uintCV(chainId),
   });
-  console.log("verifyPost: domain: ", domain);
-  const structuredDataHash = bytesToHex(hashSha256Sync(encodeStructuredDataBytes({ message, domain })));
-  console.log("structuredDataHash: " + structuredDataHash);
-  const signatureBytes = hexToBytes(signature);
-  const strippedSignature = signatureBytes.slice(0, -1);
-  let pubkey: string = "-";
-  let stacksAddress: string = "-";
-  try {
-    pubkey = publicKeyFromSignatureRsv(structuredDataHash, signature);
 
-    if (network === "mainnet" || network === "testnet" || network === "devnet") {
-      stacksAddress = publicKeyToAddressSingleSig(pubkey, network);
-    }
-  } catch (err: any) {}
-  let result = false;
-  try {
-    console.log("verifyForumSignature: stacksAddress:" + stacksAddress);
-    console.log("verifyForumSignature: publicKey:" + publicKey);
-    console.log("verifyForumSignature: structuredDataHash:" + structuredDataHash);
-    console.log("verifyForumSignature: structuredDataHash:" + structuredDataHash);
-    console.log("verifyForumSignature: strippedSignature:" + signature);
-    result = verifySignature(bytesToHex(strippedSignature), structuredDataHash, publicKey);
-  } catch (err: any) {}
+  // Get raw bytes, not hex
+  const encoded = encodeStructuredDataBytes({ message, domain });
+  const structuredDataHash = hashSha256Sync(encoded); // returns Uint8Array
+
+  // Signature manipulation
+  const signatureBytes = hexToBytes(signature);
+  const strippedSignature = signatureBytes.slice(0, 64); // remove recovery byte if present (not always required)
+
+  const net = network === "mainnet" ? STACKS_MAINNET : STACKS_TESTNET;
+  const stacksAddress = publicKeyToAddressSingleSig(publicKey, net);
+
+  // Verify signature
+  const result = verifySignature(
+    bytesToHex(strippedSignature), // signature in hex
+    bytesToHex(structuredDataHash), // hash in hex (not double-hashed or string)
+    publicKey
+  );
+
+  console.log({ stacksAddress, result });
   return result ? stacksAddress : undefined;
 }
+// 513da2f3c47f636b8899f8cbbb637e58bd1b6f53c9a7cbb27d8b049d6e1cdf8e
