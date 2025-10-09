@@ -96,9 +96,9 @@ export function verifyPost(forumContent: BaseForumContent, auth: PostAuthorisati
   }
 }
 
-// SIP-018 domain (must match client signing)
+// SIP-018 domain - must match client signing - is BigMarket nt BM Forum!
 const domain = {
-  name: "BigMarket Forum",
+  name: "BigMarket",
   version: "1.0.0",
   chainId: 1,
 };
@@ -153,4 +153,4 @@ function verifyForumSignature(network: string, appName: string, appVersion: stri
   console.log({ stacksAddress, result });
   return result ? stacksAddress : undefined;
 }
-// 513da2f3c47f636b8899f8cbbb637e58bd1b6f53c9a7cbb27d8b049d6e1cdf8e
+// fcc9ee7ca4e97859d042b5ba5dc8014d29cc200a2c692ee10bb860238246080e
