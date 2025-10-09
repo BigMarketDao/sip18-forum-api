@@ -146,10 +146,11 @@ function verifyForumSignature(network: string, appName: string, appVersion: stri
   } catch (err: any) {}
   let result = false;
   try {
+    console.log("verifyForumSignature: stacksAddress:" + stacksAddress);
     console.log("verifyForumSignature: publicKey:" + publicKey);
     console.log("verifyForumSignature: structuredDataHash:" + structuredDataHash);
     console.log("verifyForumSignature: structuredDataHash:" + structuredDataHash);
-    console.log("verifyForumSignature: strippedSignature:" + strippedSignature);
+    console.log("verifyForumSignature: strippedSignature:" + signature);
     result = verifySignature(bytesToHex(strippedSignature), structuredDataHash, publicKey);
   } catch (err: any) {}
   return result ? stacksAddress : undefined;
