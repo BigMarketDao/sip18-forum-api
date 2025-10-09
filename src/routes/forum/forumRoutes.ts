@@ -8,7 +8,8 @@ const router = express.Router();
 router.post("/message", async (req, res) => {
   try {
     const { forumContent, auth }: { forumContent: ForumMessage; auth: PostAuthorisation } = req.body;
-    console.log(auth);
+    console.log("router.post(/message", auth);
+    console.log("router.post(/message", forumContent);
     console.log(forumContent);
     if (!forumContent || !auth.signature || !auth.publicKey) {
       res.status(400).json({ error: "Missing fields" });

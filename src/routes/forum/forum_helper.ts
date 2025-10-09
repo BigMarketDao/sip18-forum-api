@@ -2,9 +2,9 @@ import { getConfig } from "../../lib/config.js";
 import { ClarityValue, encodeStructuredDataBytes, publicKeyFromSignatureRsv, publicKeyToAddressSingleSig, stringAsciiCV, TupleCV, tupleCV, TupleData, uintCV, verifySignature } from "@stacks/transactions";
 import { forumMessageBoardCollection, forumMessageCollection } from "../../lib/data/db_models.js";
 import { bytesToHex, hexToBytes } from "@stacks/common";
-import { sha256 } from "@noble/hashes/sha256";
 import { ChainId } from "@stacks/network";
 import type { AuthenticatedForumContent, AuthenticatedForumMessageBoard, BaseForumContent, ForumMessage, LinkedAccount, PostAuthorisation } from "sip18-forum-types";
+import { hashSha256Sync } from "@stacks/encryption";
 
 export function buildTree(messages: AuthenticatedForumContent[]) {
   const map = new Map<string, AuthenticatedForumContent>();
@@ -131,7 +131,7 @@ function verifyForumSignature(network: string, appName: string, appVersion: stri
     "chain-id": uintCV(chainId),
   });
   console.log("verifyPost: domain: ", domain);
-  const structuredDataHash = bytesToHex(sha256(encodeStructuredDataBytes({ message, domain })));
+  const structuredDataHash = bytesToHex(hashSha256Sync(encodeStructuredDataBytes({ message, domain })));
   console.log("structuredDataHash: " + structuredDataHash);
   const signatureBytes = hexToBytes(signature);
   const strippedSignature = signatureBytes.slice(0, -1);
@@ -150,7 +150,7 @@ function verifyForumSignature(network: string, appName: string, appVersion: stri
     console.log("verifyForumSignature: structuredDataHash:" + structuredDataHash);
     console.log("verifyForumSignature: structuredDataHash:" + structuredDataHash);
     console.log("verifyForumSignature: strippedSignature:" + strippedSignature);
-    result = verifySignature(signatureBytes, structuredDataHash, publicKey);
+    result = verifySignature(bytesToHex(strippedSignature), structuredDataHash, publicKey);
   } catch (err: any) {}
   return result ? stacksAddress : undefined;
 }
