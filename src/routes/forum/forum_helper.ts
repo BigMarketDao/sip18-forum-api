@@ -133,6 +133,8 @@ function verifyForumSignature(network: string, appName: string, appVersion: stri
   // Get raw bytes, not hex
   const encoded = encodeStructuredDataBytes({ message, domain });
   const structuredDataHash = hashSha256Sync(encoded); // returns Uint8Array
+  console.log("verifyForumSignature: structuredDataHash: " + structuredDataHash);
+  console.log("verifyForumSignature: publicKey: " + publicKey);
 
   // Signature manipulation
   const signatureBytes = hexToBytes(signature);
