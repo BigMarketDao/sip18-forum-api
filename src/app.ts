@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:8060", "http://localhost:8080", "http://localhost:8081", "https://brightblock.org", "https://bigmarket.ai", "https://forum.bigmarket.ai", "https://dao.bigmarket.ai"],
+    origin: ["http://localhost:8081", "https://bigmarket.ai", "https://forum.bigmarket.ai", "https://testnet.bigmarket.ai", "https://mainnet.bigmarket.ai"],
   })
 );
 
