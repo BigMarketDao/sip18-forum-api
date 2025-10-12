@@ -7,7 +7,7 @@
     "build": "tsc",
     "build:testnet": "NODE_ENV=testnet tsc",
     "build:mainnet": "NODE_ENV=mainnet tsc",
-    "start": "NODE_ENV=testnet node dist/app.js",
+    "start": "NODE_ENV=mainnet node dist/app.js",
     "dev": "NODE_ENV=devnet nodemon --watch src --ext ts --exec tsx src/app.ts"
   },
   "keywords": [],
