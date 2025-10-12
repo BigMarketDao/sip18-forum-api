@@ -1,26 +1,45 @@
 #!/bin/bash -e
 #
-############################################################
+# Usage: ./deploy.sh testnet
+#        ./deploy.sh mainnet
 
-DOCKER_NAME=sip18_forum_api
+NETWORK=$1
+if [ -z "$NETWORK" ]; then
+  echo "Usage: $0 [testnet|mainnet]"
+  exit 1
+fi
+
+DOCKER_NAME=sip18_forum_api_${NETWORK}
 
 
 printf "\n\n"
 printf "====================================================\n"
-printf "Building as docker container: $DOCKER_NAME \n"
+printf "Building on: as docker container: $DOCKER_NAME \n"
 
-source ~/.profile;
-#cd ~/hubgit/sip18forum/sip18-forum-api
-#git pull https://github.com/radicleart/sip18-forum-api.git daoless
-docker login;
-docker build --build-arg NODE_ENV=mainnet -t mijoco/sip18_forum_api:latest .
-docker push mijoco/sip18_forum_api:latest
-docker rm -f sip18_forum_api
-docker run -d -t -i --network host -e NODE_ENV=mainnet --env-file ~/.env --name $DOCKER_NAME -p 6090:6090 mijoco/sip18_forum_api:latest
+source ~/.profile
+
+docker login
+docker build --build-arg NODE_ENV=$NETWORK -t mijoco/sip18_forum_api:$NETWORK .
+docker push mijoco/sip18_forum_api:$NETWORK
+docker rm -f $DOCKER_NAME || true
+
+# Use different ports if needed (e.g. 6080 for testnet, 6081 for mainnet)
+PORT="6080"
+if [ "$NETWORK" = "mainnet" ]; then
+  PORT="6081"
+fi
+
+docker run -d -t -i \
+  --network host \
+  -e NODE_ENV=$NETWORK \
+  --env-file ~/.env \
+  --name $DOCKER_NAME \
+  -p $PORT:6090 \
+  mijoco/sip18_forum_api:$NETWORK
+
 docker logs -f $DOCKER_NAME
 
 printf "Finished....\n"
 printf "====================================================\n\n"
 
 exit 0;
-
