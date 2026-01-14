@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import cors from "cors";
+import { healthRoutes } from "./routes/health/healthRoutes.js";
 import { forumRoutes } from "./routes/forum/forumRoutes.js";
 import { getConfig, printConfig, setConfigOnStart } from "./lib/config.js";
 import { connect } from "./lib/data/db_models.js";
@@ -19,7 +20,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: ["http://localhost:8081", "https://bigmarket.ai", "https://forum.bigmarket.ai", "https://testnet.bigmarket.ai", "https://mainnet.bigmarket.ai"],
-  })
+  }),
 );
 
 app.use(morgan("tiny"));
@@ -30,7 +31,7 @@ setConfigOnStart();
 app.use(
   bodyParser.urlencoded({
     extended: true,
-  })
+  }),
 );
 app.use(bodyParser.json());
 app.use((req, res, next) => {
@@ -42,6 +43,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/forum-api/forum", forumRoutes);
+app.use("/health", healthRoutes);
 
 console.log(`\n\nExpress is listening at http://localhost:${getConfig().port}`);
 console.log("Startup Environment: ", process.env.NODE_ENV);
